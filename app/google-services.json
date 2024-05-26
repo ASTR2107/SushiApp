@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "814534121868",
+    "project_id": "andoidsushi",
+    "storage_bucket": "andoidsushi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814534121868:android:e94a80bb1af15f40d31ea9",
+        "android_client_info": {
+          "package_name": "com.example.sushidelevery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNG3TBg88TH1WtbCzPY4qn8-DU6gNz4zA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
