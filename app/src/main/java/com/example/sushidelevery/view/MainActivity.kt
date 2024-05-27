@@ -2,6 +2,8 @@ package com.example.sushidelevery.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log.*
 import androidx.activity.ComponentActivity
@@ -25,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
@@ -32,10 +35,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sushidelevery.R
 import com.example.sushidelevery.view.data.Menu
 import com.example.sushidelevery.viewmodel.MainViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.io.ByteArrayOutputStream
 
 
 class MainActivity : ComponentActivity() {
@@ -82,7 +89,9 @@ NavHost(navController = navController, startDestination = "menu_screen") {
 @Preview(showBackground = true)
 @Composable
 fun MenuScreen() {
+    val context = LocalContext.current
     val fs = Firebase.firestore
+    val storage = Firebase.storage.reference.child("images")
     val list = remember {
         mutableStateOf(emptyList<Menu>())
     }
@@ -111,17 +120,17 @@ fun MenuScreen() {
         }
         Spacer(modifier = Modifier.height(10.dp))
         Button(onClick = {
-            fs.collection("menu")
-                .document().set(
-                    Menu(
-                        "Сет Philadelphia 8.шт",
-                        "Bla",
-                        "Лосось, Икра, Огурец",
-                        "400р",
-                        "Роллы",
-                        "url"
-                    )
-                )
+            val task = storage.child("plant16").putBytes(
+                bitmapToByteArray(context)
+            )
+            task.addOnSuccessListener {uploadTask ->
+                uploadTask.metadata?.reference
+                    ?.downloadUrl?.addOnCompleteListener {urilTask ->
+                        saveMenu(fs,urilTask.result.toString())
+                }
+
+
+            }
         }
         ) {
             Text(text = "Name")
@@ -129,6 +138,28 @@ fun MenuScreen() {
 
 
     }
+}
+private fun bitmapToByteArray(context: Context): ByteArray{
+    val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.plants)
+    val baos = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+    return baos.toByteArray()
+
+}
+
+private fun saveMenu(fs: FirebaseFirestore, url: String){
+
+    fs.collection("menu")
+        .document().set(
+            Menu(
+                "Сет Philadelphia 8.шт",
+                "Bla",
+                "Лосось, Икра, Огурец",
+                "400р",
+                "Роллы",
+                url
+            )
+        )
 }
 
 
