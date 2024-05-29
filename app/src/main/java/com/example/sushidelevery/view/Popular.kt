@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.navigation.NavController
 import com.example.sushidelevery.view.data.ButtonConstants
 
 @Composable
-fun Popular(){
+fun Popular(navController: NavController){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -18,25 +19,25 @@ fun Popular(){
     }
 }
 @Composable
-fun Promotions(){
+fun Promotions(navController: NavController){
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Popular")
+        Text(text = "Promotions")
 
     }
 }
 
 @Composable
-fun ForBonuses() {
+fun ForBonuses(navController: NavController) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Popular")
+        Text(text = "ForBonuses")
 
     }
 }

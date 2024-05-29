@@ -21,9 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.example.sushidelevery.ui.theme.Green3
 
 @Composable
-fun News(
-    onClick: () -> Unit
-) {
+fun News() {
     Box(
         modifier = Modifier
             .background(Green3)

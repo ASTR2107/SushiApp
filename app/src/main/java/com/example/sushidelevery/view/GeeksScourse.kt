@@ -46,9 +46,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.example.sushidelevery.ui.theme.Beige1
 import com.example.sushidelevery.ui.theme.Beige2
 import com.example.sushidelevery.ui.theme.Beige3
@@ -73,8 +70,9 @@ import com.example.sushidelevery.ui.theme.Violet3
 
 @Composable
 fun HomeScreens(
-    onClick: () -> Unit,
+    navController: NavController
 ) {
+
     Box(
         modifier = Modifier
             .background(Green3)
@@ -83,8 +81,8 @@ fun HomeScreens(
         Column {
             GreetingSection()
             ChipSection(
-                navController = NavController,
-                onClick)
+                navController = NavController
+                )
             SuggestionSection()
             CourseSection(
                 courses = listOf(
@@ -237,7 +235,6 @@ fun GreetingSection(
 @Composable
 fun ChipSection(
     navController: NavController.Companion,
-    onClick: () -> Unit
 ) {
     val bottomMenuContent = listOf("Популярное","Скидки","За бонусы")
     var selectedChipIndex by remember {
@@ -257,7 +254,7 @@ fun ChipSection(
                         else Green10
                     )
                     .padding(15.dp)) {
-                Button(onClick){
+                Button({}){
                     Text(text = bottomMenuContent[it], color = Color.White)
                 }
 
