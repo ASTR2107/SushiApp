@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.example.sushidelevery.view
 
@@ -41,19 +41,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sushidelevery.model.repository.data.AuthRepository
 import com.example.sushidelevery.model.repository.data.AuthRepositoryImpl
-import com.example.sushidelevery.model.repository.data.UserModel
 import com.example.sushidelevery.ui.theme.Green30
 import com.example.sushidelevery.view.components.TabLayout
 import com.example.sushidelevery.viewmodel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 @Composable
 fun Autorization(
     navController: NavController
 ) {
-    val auth = Firebase.auth
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("main", Context.MODE_PRIVATE)
     val viewModel: MainViewModel = viewModel()
@@ -93,9 +93,9 @@ fun Autorization(
 }
 
 
+
 @Composable
 fun SignIn(
-    auth: FirebaseAuth,
     phone: String,
     password: String,
     navController: NavController,
@@ -103,8 +103,8 @@ fun SignIn(
     trailing: (@Composable () -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onClick: () -> Unit
-): AuthRepository{
-    val authRepository: AuthRepository
+):AuthRepositoryImpl{
+    val auth = com.google.firebase.Firebase.auth
     val meChecked = remember {
         mutableStateOf(false)
     }
@@ -168,7 +168,8 @@ fun SignIn(
                     .fillMaxWidth()
                     .height(35.dp),
                 onClick = {
-                    authRepository.firebaseLogIn(email = UserModel, password = String())
+
+
                     sharedPreferences.edit().apply {
                         putBoolean("", true)
                         putString("phone", phone.value)
@@ -194,6 +195,7 @@ fun SignIn(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUp(
     navController: NavController,
@@ -201,7 +203,9 @@ fun SignUp(
     trailing: (@Composable () -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onClick: () -> Unit
-) {
+): AuthRepository {
+    val firebaseAuth: FirebaseAuth
+    val firebaseFirestore: FirebaseFirestore
     val meChecked = remember {
         mutableStateOf(false)
     }
@@ -265,6 +269,8 @@ fun SignUp(
                     .fillMaxWidth()
                     .height(35.dp),
                 onClick = {
+
+
                     sharedPreferences.edit().apply {
                         putBoolean("", true)
                         putString("phone", phone.value)

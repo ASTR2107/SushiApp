@@ -30,13 +30,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sushidelevery.R
 import com.example.sushidelevery.view.data.Menu
 import com.example.sushidelevery.viewmodel.MainViewModel
+import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("CoroutineCreationDuringComposition")
     private lateinit var mainViewModel: MainViewModel
@@ -52,6 +54,8 @@ class MainActivity : ComponentActivity() {
 
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         e("AAA", "Created")
+
+        FirebaseApp.initializeApp(applicationContext)
         setContent {
           News()
         }
