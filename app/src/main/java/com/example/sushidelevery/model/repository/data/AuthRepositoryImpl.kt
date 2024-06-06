@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-open class AuthRepositoryImpl @Inject constructor(
+abstract class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val firebaseFirestore: FirebaseFirestore
+    private val firebaseFirestore: FirebaseFirestore, override val currentUser: UserModel?
 ) : AuthRepository {
     val TAG = "AuthRepositoryImpl"
 
-    override suspend fun firebaseSignUp(user: UserModel,auth: FirebaseAuth): Flow<NetworkResult<Boolean>> {
+    override suspend fun firebaseSignUp(user: UserModel): Flow<NetworkResult<Boolean>> {
         return flow {
             var isSuccess = false
             emit(NetworkResult.Loading())
@@ -57,8 +57,7 @@ open class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun firebaseLogIn(
         email: String,
-        password: String,
-        auth: FirebaseAuth
+        password: String
     ): Flow<NetworkResult<Boolean>> {
         return flow {
             var isSuccess = false
@@ -94,4 +93,5 @@ open class AuthRepositoryImpl @Inject constructor(
         }
 
     }
+
 }

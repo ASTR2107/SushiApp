@@ -9,6 +9,7 @@ import android.util.Log
 import android.util.Log.e
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,9 +41,7 @@ import java.io.ByteArrayOutputStream
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @SuppressLint("CoroutineCreationDuringComposition")
-    private lateinit var mainViewModel: MainViewModel
-
+    private val mainViewModel by viewModels<MainViewModel>()
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +51,12 @@ class MainActivity : ComponentActivity() {
             .document()
         Log.d("testLogs", "in onCreate")
 
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        //mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         e("AAA", "Created")
 
         FirebaseApp.initializeApp(applicationContext)
         setContent {
-          News()
+
         }
     }
 }

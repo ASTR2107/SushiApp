@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.example.sushidelevery.view
 
@@ -25,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,11 +55,12 @@ import com.google.firebase.ktx.Firebase
 
 @Composable
 fun Autorization(
+    viewModel: MainViewModel?,
     navController: NavController
 ) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("main", Context.MODE_PRIVATE)
-    val viewModel: MainViewModel = viewModel()
+    val authResult = viewModel?.loginFlow?.collectAsState()
 
     val selectTab = remember {
         mutableStateOf(0)
@@ -74,8 +78,7 @@ fun Autorization(
                     SignIn(
                         navController = navController,
                         sharedPreferences = sharedPreferences
-                    ) {}
-
+                    ){}
                 },
                 "Sign Up" to {
                     SignUp(
@@ -92,19 +95,16 @@ fun Autorization(
     }
 }
 
-
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignIn(
-    phone: String,
-    password: String,
     navController: NavController,
     sharedPreferences: SharedPreferences,
     trailing: (@Composable () -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onClick: () -> Unit
-):AuthRepositoryImpl{
-    val auth = com.google.firebase.Firebase.auth
+){
+    val auth = Firebase.auth
     val meChecked = remember {
         mutableStateOf(false)
     }
@@ -169,7 +169,6 @@ fun SignIn(
                     .height(35.dp),
                 onClick = {
 
-
                     sharedPreferences.edit().apply {
                         putBoolean("", true)
                         putString("phone", phone.value)
@@ -195,6 +194,7 @@ fun SignIn(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUp(
@@ -203,7 +203,7 @@ fun SignUp(
     trailing: (@Composable () -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onClick: () -> Unit
-): AuthRepository {
+) {
     val firebaseAuth: FirebaseAuth
     val firebaseFirestore: FirebaseFirestore
     val meChecked = remember {

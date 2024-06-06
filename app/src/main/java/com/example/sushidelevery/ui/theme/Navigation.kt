@@ -1,6 +1,17 @@
 package com.example.sushidelevery.ui.theme
 
-/*
+import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.sushidelevery.view.Autorization
+import com.example.sushidelevery.view.HomeScreens
+import com.example.sushidelevery.view.Popular
+
+
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -15,16 +26,13 @@ fun Navigation() {
         composable("home_screens") {
             HomeScreens(navController = navController)
         }
-        composable("news"){
-            News {navController.navigate("popular")}
-        }
         composable("popular"){
             Popular(navController = navController)
         }
     }
 }
 
- */
+
 
 
 
