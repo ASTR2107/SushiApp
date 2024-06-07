@@ -1,4 +1,5 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class
 )
 
@@ -28,8 +29,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.currentRecomposeScope
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,10 +45,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sushidelevery.model.repository.data.AuthRepository
 import com.example.sushidelevery.model.repository.data.AuthRepositoryImpl
+import com.example.sushidelevery.model.repository.data.UserModel
 import com.example.sushidelevery.ui.theme.Green30
 import com.example.sushidelevery.view.components.TabLayout
 import com.example.sushidelevery.viewmodel.MainViewModel
@@ -51,11 +58,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 
 @Composable
 fun Autorization(
-    viewModel: MainViewModel?,
+    viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     navController: NavController
 ) {
     val context = LocalContext.current
@@ -78,7 +90,7 @@ fun Autorization(
                     SignIn(
                         navController = navController,
                         sharedPreferences = sharedPreferences
-                    ){}
+                    ) {}
                 },
                 "Sign Up" to {
                     SignUp(
@@ -101,9 +113,11 @@ fun SignIn(
     navController: NavController,
     sharedPreferences: SharedPreferences,
     trailing: (@Composable () -> Unit)? = null,
+    viewModel: MainViewModel = viewModel(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onClick: () -> Unit
-){
+) {
+    val scope = rememberCoroutineScope()
     val auth = Firebase.auth
     val meChecked = remember {
         mutableStateOf(false)
@@ -169,6 +183,7 @@ fun SignIn(
                     .height(35.dp),
                 onClick = {
 
+
                     sharedPreferences.edit().apply {
                         putBoolean("", true)
                         putString("phone", phone.value)
@@ -198,12 +213,15 @@ fun SignIn(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUp(
+    mainViewModel: MainViewModel,
     navController: NavController,
     sharedPreferences: SharedPreferences,
-    trailing: (@Composable () -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    trailing: (@Composable () -> Unit)? = null,
+
     onClick: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     val firebaseAuth: FirebaseAuth
     val firebaseFirestore: FirebaseFirestore
     val meChecked = remember {
@@ -212,12 +230,14 @@ fun SignUp(
     val phone = remember {
         mutableStateOf("")
     }
-    val passwordRepeat = remember {
+    var password by remember {
         mutableStateOf("")
     }
-    val showPassword = remember {
-        mutableStateOf(false)
+
+    var passwordRepeat = remember {
+        mutableStateOf("")
     }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -241,11 +261,22 @@ fun SignUp(
         TextField(
             value = passwordRepeat.value,
             singleLine = true,
-            onValueChange = { passwordRepeat.value = it },
+            onValueChange = { password = it },
             placeholder = { Text(text = "Password") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
 
             )
+
+        Spacer(modifier = Modifier.padding(4.dp))
+
+        TextField(
+            value = phone.value,
+            singleLine = true,
+            onValueChange = { passwordRepeat.value = it },
+            placeholder = { Text(text = "Phone") },
+            visualTransformation = visualTransformation
+
+        )
 
         Spacer(modifier = Modifier.padding(4.dp))
 
@@ -270,7 +301,9 @@ fun SignUp(
                     .height(35.dp),
                 onClick = {
 
+            )
 
+                /*
                     sharedPreferences.edit().apply {
                         putBoolean("", true)
                         putString("phone", phone.value)
@@ -279,15 +312,18 @@ fun SignUp(
                     navController.navigate("home") {
                         popUpTo(0)
                     }
-                }
+
+                 */
+            }
             )
-            {
+            { /*
                 Text(
                     text = "Регистрация",
                     fontSize = (23.sp),
                     color = Color.White,
                     modifier = Modifier.padding(end = 10.dp),
                 )
+                */
 
             }
             Text(

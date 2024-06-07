@@ -2,7 +2,6 @@ package com.example.sushidelevery.model.repository.data
 
 import android.util.Log
 import com.example.sushidelevery.utils.Constants
-import com.example.sushidelevery.view.data.BottomMenuContent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
@@ -10,13 +9,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-abstract class AuthRepositoryImpl @Inject constructor(
+class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore, override val currentUser: UserModel?
 ) : AuthRepository {
     val TAG = "AuthRepositoryImpl"
 
-    override suspend fun firebaseSignUp(user: UserModel): Flow<NetworkResult<Boolean>> {
+    override suspend fun firebaseSignUp(user: UserModel, auth: FirebaseAuth): Flow<NetworkResult<Boolean>> {
         return flow {
             var isSuccess = false
             emit(NetworkResult.Loading())
@@ -57,7 +56,8 @@ abstract class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun firebaseLogIn(
         email: String,
-        password: String
+        password: String,
+        auth: FirebaseAuth
     ): Flow<NetworkResult<Boolean>> {
         return flow {
             var isSuccess = false

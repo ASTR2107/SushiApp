@@ -1,21 +1,15 @@
 package com.example.sushidelevery.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sushidelevery.model.repository.data.AuthRepository
 import com.example.sushidelevery.model.repository.data.NetworkResult
-import com.example.sushidelevery.model.repository.data.NetworkResult.Loading
 import com.example.sushidelevery.model.repository.data.Retrofit.NewsApiRepository
 import com.example.sushidelevery.model.repository.data.UserModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.auth.User
-import com.google.rpc.context.AttributeContext.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.reduce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +19,10 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val newsApiRepository: NewsApiRepository
 ) : ViewModel() {
+    suspend fun register(userModel: UserModel, firebaseAuth: FirebaseAuth) = authRepository.firebaseSignUp(userModel,firebaseAuth)
+    suspend fun login(email: String, password: String,auth: FirebaseAuth) = authRepository.firebaseLogIn(email, password,auth)
+}
+/*
     private val _loginFlow = MutableStateFlow<NetworkResult<UserModel>?>(null)
     val loginFlow: StateFlow<NetworkResult<UserModel>?> = _loginFlow
 
@@ -43,17 +41,19 @@ class MainViewModel @Inject constructor(
     fun loginUser(email: String, password: String) = viewModelScope
         .launch {
             _loginFlow.value = NetworkResult.Loading()
-            authRepository.firebaseLogIn(email,password)
+            authRepository.firebaseLogIn(email, password, FirebaseAuth.getInstance())
              _loginFlow.value = return@launch
     }
 
     fun signUpUser(userModel: UserModel) = viewModelScope
         .launch {
             _signUpFlow.value = NetworkResult.Loading()
-            authRepository.firebaseSignUp(userModel)
+            authRepository.firebaseSignUp(userModel, FirebaseAuth.getInstance())
             _signUpFlow.value = return@launch
         }
 }
+
+ */
 /*
     init {
         Log.e("AAA", "Created")
