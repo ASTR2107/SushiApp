@@ -27,7 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import com.example.sushidelevery.R
 import com.example.sushidelevery.view.data.Menu
 import com.example.sushidelevery.viewmodel.MainViewModel
@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
 
         FirebaseApp.initializeApp(applicationContext)
         setContent {
+            MenuScreen()
 
         }
     }

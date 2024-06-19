@@ -2,7 +2,6 @@ package com.example.sushidelevery.di.modules
 
 import com.example.sushidelevery.model.repository.data.AuthRepository
 import com.example.sushidelevery.model.repository.data.AuthRepositoryImpl
-import com.example.sushidelevery.model.repository.data.UserModel
 import com.example.sushidelevery.ui.theme.usecase.AuthUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

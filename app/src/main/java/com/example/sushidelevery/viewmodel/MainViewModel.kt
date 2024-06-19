@@ -19,8 +19,7 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val newsApiRepository: NewsApiRepository
 ) : ViewModel() {
-    suspend fun register(userModel: UserModel, firebaseAuth: FirebaseAuth) = authRepository.firebaseSignUp(userModel,firebaseAuth)
-    suspend fun login(email: String, password: String,auth: FirebaseAuth) = authRepository.firebaseLogIn(email, password,auth)
+
 }
 /*
     private val _loginFlow = MutableStateFlow<NetworkResult<UserModel>?>(null)

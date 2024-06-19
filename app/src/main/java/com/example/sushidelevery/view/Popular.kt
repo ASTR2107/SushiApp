@@ -6,7 +6,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
-import com.example.sushidelevery.view.data.ButtonConstants
 
 @Composable
 fun Popular(navController: NavController){

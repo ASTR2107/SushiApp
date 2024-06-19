@@ -1,7 +1,3 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
-)
 
 package com.example.sushidelevery.view
 
@@ -28,8 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,34 +39,24 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.sushidelevery.model.repository.data.AuthRepository
-import com.example.sushidelevery.model.repository.data.AuthRepositoryImpl
-import com.example.sushidelevery.model.repository.data.UserModel
 import com.example.sushidelevery.ui.theme.Green30
 import com.example.sushidelevery.view.components.TabLayout
 import com.example.sushidelevery.viewmodel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.launch
 
 @Composable
 fun Autorization(
-    viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    //viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     navController: NavController
 ) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("main", Context.MODE_PRIVATE)
-    val authResult = viewModel?.loginFlow?.collectAsState()
+   // val authResult = viewModel?.loginFlow?.collectAsState()
 
     val selectTab = remember {
         mutableStateOf(0)
@@ -93,11 +77,9 @@ fun Autorization(
                     ) {}
                 },
                 "Sign Up" to {
-                    SignUp(
-                        navController = navController,
+                    SignUp(navController = navController,
                         sharedPreferences = sharedPreferences
                     ) {}
-
                 }
             ),
             onTabClick = {
@@ -213,11 +195,12 @@ fun SignIn(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUp(
-    mainViewModel: MainViewModel,
     navController: NavController,
     sharedPreferences: SharedPreferences,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
     trailing: (@Composable () -> Unit)? = null,
+    //mainViewModel: MainViewModel,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+
 
     onClick: () -> Unit
 ) {
@@ -300,12 +283,8 @@ fun SignUp(
                     .fillMaxWidth()
                     .height(35.dp),
                 onClick = {
-
-            )
-
-                /*
                     sharedPreferences.edit().apply {
-                        putBoolean("", true)
+                        putBoolean("loggedIn", true)
                         putString("phone", phone.value)
                     }
                         .apply()
@@ -313,17 +292,16 @@ fun SignUp(
                         popUpTo(0)
                     }
 
-                 */
-            }
-            )
-            { /*
+
+                }
+            ) {
                 Text(
                     text = "Регистрация",
                     fontSize = (23.sp),
                     color = Color.White,
                     modifier = Modifier.padding(end = 10.dp),
                 )
-                */
+
 
             }
             Text(
@@ -332,6 +310,7 @@ fun SignUp(
                 modifier = Modifier.padding(top = 20.dp),
                 textDecoration = TextDecoration.Underline
             )
+
 
             Row(
                 horizontalArrangement = Arrangement.Absolute.SpaceEvenly
@@ -352,6 +331,7 @@ fun SignUp(
         }
     }
 }
+
 /*
 @Composable
 fun AppTextFiled(
